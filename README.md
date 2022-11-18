@@ -14,3 +14,4 @@ READ, WRITE, DELETE, and UPDATE operations.
 - DELETE
 - UPDATE
 
+Download the standalone file to run if don't have GO installed on your computer.
