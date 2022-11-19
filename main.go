@@ -20,6 +20,7 @@ _________________
 [3]. Storage Setup Fn
 [4]. Operation FNs
 	- [4.1]. Write
+	- [4.2]. Read
 */
 
 // model
@@ -49,7 +50,7 @@ func Homeview() {
 
 	// heading
 	var version string = "1.0"
-	var title string = "Welcome to BRAHE " + version
+	var title string = "Hello I'M BRAHE " + version
 	var line string = "---------------------------------------------"
 	fmt.Println(line)
 	fmt.Println("           ", title)
@@ -109,8 +110,8 @@ OPERATION FNs
 // write
 func write(word string, definition string, examples []string, nouns []string) {
 	_word := Word{
-		Word:       word,
-		Definition: definition,
+		Word:       strings.TrimSuffix(word, "\n"),
+		Definition: strings.TrimSuffix(definition, "\n"),
 		Examples:   examples,
 		Nouns:      nouns,
 	}
@@ -120,9 +121,38 @@ func write(word string, definition string, examples []string, nouns []string) {
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		fmt.Println(_word)
-		os.WriteFile("./store/"+word+".json", encodedJSON, os.ModePerm)
-		fmt.Println("\""+word+"\"", " is added..")
+		os.WriteFile("./store/"+strings.TrimSuffix(word, "\n")+".json", encodedJSON, os.ModePerm)
+	}
+}
+
+// read
+func read(word string) {
+	// reading file from fs
+	result, err := os.ReadFile("./store/" + word + ".json")
+
+	// parsed json data
+	var parsedWord Word
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		stringifiedResult := string(result)
+		err := json.Unmarshal([]byte(stringifiedResult), &parsedWord)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			// printing output
+			Homeview()
+			fmt.Println("Showing Result for", parsedWord.Word)
+			fmt.Println("WORD       :", parsedWord.Word)
+			fmt.Println("DEFINITION :", parsedWord.Definition)
+			for index, value := range parsedWord.Examples {
+				fmt.Println("EXAMPLE", index, " : "+value)
+			}
+			for index, value := range parsedWord.Nouns {
+				fmt.Println("NOUN   ", index, " : "+value)
+			}
+			fmt.Println("---------------------------------------------")
+		}
 	}
 }
 
@@ -138,7 +168,7 @@ func main() {
 
 	// allowing users to perform operations
 	for true {
-		Homeview()
+		// Homeview()
 		fmt.Println("ENTER AN OPERATION:")
 
 		// Operation input
@@ -147,7 +177,6 @@ func main() {
 
 		switch option {
 		case "write":
-
 			// taking user input for write operation
 			for true {
 				Homeview()
@@ -210,14 +239,26 @@ func main() {
 				break
 			}
 		case "read":
-			fmt.Println("reading")
+			// taking user input for read operation
+			for true {
+				Homeview()
+				fmt.Println("Enter the word to search:")
+				readInput, err := sc.ReadString('\n')
+				if err != nil {
+					fmt.Println(err)
+				}
+
+				// running read operation
+				read(strings.TrimSuffix(readInput, "\n"))
+				break
+			}
 		case "update":
 			fmt.Println("updating")
 		case "delete":
 			fmt.Println("removing")
 		default:
 			Homeview()
-			fmt.Println(option, " was an invalid input!")
+			fmt.Println("ALERT: '"+option+"'", " was an invalid input!")
 			continue
 		}
 	}
