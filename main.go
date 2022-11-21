@@ -21,6 +21,8 @@ _________________
 [4]. Operation FNs
 	- [4.1]. Write
 	- [4.2]. Read
+	- [4.3]. Update <PENDING>
+	- [4.4]. Delete
 */
 
 // model
@@ -156,6 +158,19 @@ func read(word string) {
 	}
 }
 
+// delete
+func delete(word string) string {
+	// checking if the file is available
+	err := os.Remove("./store/" + word + ".json")
+	if err != nil {
+		fmt.Println(err)
+		return "Error Occured While Performing Delete Operation.."
+	}
+
+	var alertMsg string = word + " is deleted from the ./store directory.."
+	return alertMsg
+}
+
 func main() {
 	sc := bufio.NewReader(os.Stdin)
 
@@ -255,7 +270,18 @@ func main() {
 		case "update":
 			fmt.Println("updating")
 		case "delete":
-			fmt.Println("removing")
+			for true {
+				Homeview()
+				fmt.Println("Enter the word to delete:")
+				readInput, err := sc.ReadString('\n')
+				result := delete(strings.TrimSuffix(readInput, "\n"))
+				if err != nil {
+					fmt.Println(err)
+				} else {
+					fmt.Println(result)
+				}
+				break
+			}
 		default:
 			Homeview()
 			fmt.Println("ALERT: '"+option+"'", " was an invalid input!")
