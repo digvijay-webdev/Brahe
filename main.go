@@ -182,7 +182,7 @@ func main() {
 	fmt.Println(storageStatus)
 
 	// allowing users to perform operations
-	for true {
+	for {
 		// Homeview()
 		fmt.Println("ENTER AN OPERATION:")
 
@@ -193,7 +193,7 @@ func main() {
 		switch option {
 		case "write":
 			// taking user input for write operation
-			for true {
+			for {
 				Homeview()
 
 				var (
@@ -222,7 +222,7 @@ func main() {
 				}
 
 				// examples input
-				for true {
+				for {
 					fmt.Println("Enter example:")
 					example, err := sc.ReadString('\n')
 					example = strings.TrimSpace(example)
@@ -236,7 +236,7 @@ func main() {
 				}
 
 				// nouns input
-				for true {
+				for {
 					fmt.Println("Enter a noun:")
 					noun, err := sc.ReadString('\n')
 					noun = strings.TrimSpace(noun)
@@ -255,7 +255,7 @@ func main() {
 			}
 		case "read":
 			// taking user input for read operation
-			for true {
+			for {
 				Homeview()
 				fmt.Println("Enter the word to search:")
 				readInput, err := sc.ReadString('\n')
@@ -270,7 +270,7 @@ func main() {
 		case "update":
 			fmt.Println("updating")
 		case "delete":
-			for true {
+			for {
 				Homeview()
 				fmt.Println("Enter the word to delete:")
 				readInput, err := sc.ReadString('\n')
